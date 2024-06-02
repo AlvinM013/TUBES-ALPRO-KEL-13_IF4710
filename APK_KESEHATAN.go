@@ -4,7 +4,7 @@ import "fmt"
 
 const NMAX int = 500
 const DMAX int = 100
-const chat int = 1000
+const chat int = 10000
 
 type datadiri struct {
 	nama, pw      		string
@@ -12,16 +12,17 @@ type datadiri struct {
 }
 
 type pesan struct {
-	nama, pesan, tag1, tag2, tag3 string
+	nama, post, tag1, tag2, tag3 	string
+	noPesan 						int
 }
 
-type forumapk [chat]pesan
+var forumapk [chat]pesan
 type daftarpasien [NMAX]datadiri
 type daftardokter [DMAX]datadiri
 
 func main() {
-	var opsimenu, opsidaftar, opsilogin,opsiforum, npas, ndok int
-	var pwdokter, isipwd string
+	var opsimenu, opsidaftar, opsilogin,opsiforum, npas, ndok, npesan int
+	var pwdokter, isipwd, rep string
 	var pas daftarpasien
 	var dok daftardokter
 	var logstate bool
@@ -72,6 +73,17 @@ func main() {
 			for opsiforum != 3 {
 				menuforum()
 				fmt.Scan(&opsiforum)
+				if opsiforum == 1 {
+					search(forumapk,npesan)
+					if logstate == true {
+						fmt.Println("Reply ke post?")
+						fmt.Println("	Ya/Tidak   ")
+						fmt.Scan(&rep)
+						if rep == "ya" {
+							
+						}
+					}
+				}
 			}
 		}
 	}
@@ -92,11 +104,12 @@ func menu() {
 
 func menuforum() {
 	fmt.Println("Selamat datang di forum! Untuk berkomentar dan bertanya, mohon mendaftar sebagai pasien dan log in.")
-	fmt.Println("		{FORUM}        ")
+	fmt.Println("			{FORUM}        ")
 	fmt.Println()
-	fmt.Println("	   1> Cari")
-	fmt.Println("	   2> Lihat Forum")
-	fmt.Println("	   3> Kembali")
+	fmt.Println("		  1> Cari")
+	fmt.Println("	   	  2> Lihat Forum")
+	fmt.Println("	   	  3> Kembali")
+	fmt.Println()
 }
 
 func DafDok(n *int, D *daftardokter, Gpw, Mpw string) {
@@ -163,5 +176,23 @@ func DafDok(n *int, D *daftardokter, Gpw, Mpw string) {
 	}
 	if *ceklogin == false {
 		fmt.Println("Username atau password salah.")
+	}
+}
+
+func search(forum pesan, n int) {
+	var cari string
+	var i int = 0
+	fmt.Scan(&cari)
+	for i < n {
+		if n > 0 {
+			if cari == forum[i].tag1 || cari == forum[i].tag2 || cari == forum[i].tag3 {
+				fmt.Println(forum[i].noPesan)
+				fmt.Println(forum[i].nama)
+				fmt.Println("#",forum[i].tag1, "#",forum[i].tag2, "#",forum[i].tag3)
+				fmt.Println(forum[i].post)
+			}
+		} else {
+			fmt.Println("Tidak ada postingan dalam forum ini.")
+		}
 	}
 }
